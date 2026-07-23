@@ -1,6 +1,14 @@
 <?php
+include "auth.php";
 
-include("conn.php");
+// Permission check
+if (!hasPermission('edit_student')) {
+    echo "Unauthorized Access!";
+    exit();
+}
+
+include "conn.php";
+
 
 
 $id = $_POST['id'];

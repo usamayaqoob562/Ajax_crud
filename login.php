@@ -1,3 +1,19 @@
+<?php
+session_start();
+
+// Agar pehle se login hai to sahi page par bhejo
+if (isset($_SESSION['user_id'])) {
+    if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin') {
+        header("Location: dashboard.php");
+    } else {
+        header("Location: index.php");
+    }
+    exit();
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<!-- Rest of your HTML code -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,9 +40,11 @@
                             <label>Password</label>
                             <input type="password" id="login_password" class="form-control" placeholder="Enter password" required>
                         </div>
-                        <button type="button" id="loginUser" class="btn text-primary w-100">Login</button>
+                        <button type="button" id="loginUser" class="btn btn-primary w-100">Login</button>
                     </form>
-                    <a href="signup.php">create account</a>
+                    <div class="mt-3 text-center">
+                        <a href="signup.php">Create Account</a>
+                    </div>
                 </div>
             </div>
         </div>

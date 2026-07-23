@@ -1,6 +1,13 @@
 <?php
+include "auth.php";
 
-include("conn.php");
+// Permission check
+if (!hasPermission('add_student')) {
+    echo "Unauthorized Access!";
+    exit();
+}
+
+include "conn.php";
 
 $first_name = $_POST['first_name'];
 $last_name  = $_POST['last_name'];

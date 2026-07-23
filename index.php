@@ -1,5 +1,5 @@
 <?php
-include 'auth.php'; // Normal user check
+include 'auth.php'; 
 ?>
 <!DOCTYPE html>
 <html lang="en">

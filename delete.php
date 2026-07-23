@@ -1,8 +1,13 @@
 <?php
+include "auth.php";
 
-include("conn.php");
+// Permission check
+if (!hasPermission('delete_student')) {
+    echo "Unauthorized Access!";
+    exit();
+}
 
-
+include "conn.php";
 $id = $_POST['id'];
 
 

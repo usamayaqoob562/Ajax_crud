@@ -9,9 +9,15 @@ $password   = $_POST['password'];
 
 $checkEmail = mysqli_query($conn, "SELECT id FROM users WHERE email = '$email'");
 
-if (mysqli_num_rows($checkEmail) > 0) {
-    echo "email_exists";
-    exit;
+if(mysqli_query($conn,$sql)){
+
+    echo "1";
+
+}
+else{
+
+    echo mysqli_error($conn);
+
 }
 
 

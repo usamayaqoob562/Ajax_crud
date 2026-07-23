@@ -1,12 +1,11 @@
 $(document).ready(function () {
 
+    // 1. Check if Table exists then Load Data
     if ($("#studentTable").length) {
         loadTable();
     }
 
-    // ==========================
-    // LOAD TABLE
-    // ==========================
+    // Function to Load Table Data
     function loadTable() {
         $.ajax({
             url: "fetch.php",
@@ -17,9 +16,7 @@ $(document).ready(function () {
         });
     }
 
-    // ==========================
-    // INSERT STUDENT
-    // ==========================
+    // 2. Save / Insert Student
     $("#saveStudent").click(function () {
         let first_name = $("#first_name").val();
         let last_name = $("#last_name").val();
@@ -49,15 +46,13 @@ $(document).ready(function () {
                     modal.hide();
                     loadTable();
                 } else {
-                    alert("Insert Failed");
+                    alert("Insert Failed or Unauthorized Access!");
                 }
             }
         });
     });
 
-    // ==========================
-    // DELETE STUDENT
-    // ==========================
+    // 3. Delete Student
     $(document).on("click", ".deleteBtn", function () {
         let id = $(this).data("id");
 
@@ -70,16 +65,14 @@ $(document).ready(function () {
                     if (response == 1) {
                         loadTable();
                     } else {
-                        alert("Delete Failed");
+                        alert("Delete Failed or Unauthorized Access!");
                     }
                 }
             });
         }
     });
 
-    // ==========================
-    // OPEN EDIT MODAL
-    // ==========================
+    // 4. Fetch Single Data for Edit Modal
     $(document).on("click", ".editBtn", function () {
         let id = $(this).data("id");
 
@@ -103,9 +96,7 @@ $(document).ready(function () {
         });
     });
 
-    // ==========================
-    // UPDATE STUDENT
-    // ==========================
+    // 5. Update Student
     $("#updateStudent").click(function () {
         let id = $("#edit_id").val();
         let first_name = $("#edit_first_name").val();
@@ -131,15 +122,13 @@ $(document).ready(function () {
                     modal.hide();
                     loadTable();
                 } else {
-                    alert("Update Failed");
+                    alert("Update Failed or Unauthorized Access!");
                 }
             }
         });
     });
 
-    // ==========================
-    // REGISTER USER
-    // ==========================
+    // 6. User Registration / Signup
     $("#registerUser").click(function () {
         let first_name = $("#signup_first_name").val();
         let last_name = $("#signup_last_name").val();
@@ -180,50 +169,48 @@ $(document).ready(function () {
         });
     });
 
-    // ==========================
-    // LOGIN USER (ROLE BASED REDIRECT)
-    // ==========================
-    $("#loginUser").click(function () {
-        let email = $("#login_email").val();
-        let password = $("#login_password").val();
+    // 7. User Login (Role-based Redirection with Debugger)
+$("#loginUser").click(function () {
+    let email = $("#login_email").val();
+    let password = $("#login_password").val();
 
-        if (email == "" || password == "") {
-            alert("Please enter both Email and Password");
-            return;
-        }
+    if (email == "" || password == "") {
+        alert("Please enter both Email and Password");
+        return;
+    }
 
-        $.ajax({
-            url: "login_process.php",
-            type: "POST",
-            data: {
-                email: email,
-                password: password
-            },
-            success: function (response) {
-                response = response.trim();
+    $.ajax({
+        url: "login_process.php",
+        type: "POST",
+        data: {
+            email: email,
+            password: password
+        },
+        success: function (response) {
+            response = response.trim();
+            console.log("Server Response: ", response); // Console me log dekhein
 
-                if (response === "admin") {
-                    
-                    window.location.href = "dashboard.php";
-                } 
-                else if (response === "user") {
-                    window.location.href = "index.php";
-                } 
-                else if (response === "invalid_password") {
-                    alert("Incorrect password!");
-                } 
-                else if (response === "user_not_found") {
-                    alert("No account found with this email!");
-                } 
-                else {
-                    alert("Server Response: " + response);
-                }
-            },
-            error: function (xhr) {
-                console.log(xhr.responseText);
-                alert("AJAX Error");
+            if (response === "admin") {
+                window.location.href = "dashboard.php";
+            } 
+            else if (response === "user") {
+                window.location.href = "index.php";
+            } 
+            else if (response === "invalid_password") {
+                alert("Incorrect password!");
+            } 
+            else if (response === "user_not_found") {
+                alert("No account found with this email!");
+            } 
+            else {
+                // Agar koi unexpected response aye to show karein
+                alert("Unexpected Response: " + response);
             }
-        });
+        },
+        error: function (xhr) {
+            console.log(xhr.responseText);
+            alert("AJAX Error");
+        }
     });
-
-}); // Document Ready End
+});
+});

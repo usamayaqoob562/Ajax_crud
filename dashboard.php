@@ -1,9 +1,13 @@
 <?php
 session_start();
 
+// Temporary Debugger (Redirection Band)
+if (!isset($_SESSION['user_id'])) {
+    die("<h2 style='color:red; text-align:center;'>Session Set Nahi Hua! Login page par session create nahi ho raha.</h2>");
+}
+
 if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
-    header("Location: login.php");
-    exit();
+    die("<h2 style='color:orange; text-align:center;'>User Logged in hai lekin Admin Role nahi mila. Current Role: " . ($_SESSION['user_role'] ?? 'None') . "</h2>");
 }
 ?>
 <!DOCTYPE html>
@@ -23,10 +27,17 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Admin Dashboard</h2>
         <div>
-            <!-- Add Student Button -->
-            <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addStudentModal">
-                + Add Student
-            </button>
+            <!-- Add Student Button (Permission Check) -->
+            <?php if (function_exists('hasPermission') && hasPermission('add_student')): ?>
+                <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addStudentModal">
+                    + Add Student
+                </button>
+            <?php else: ?>
+                <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addStudentModal">
+                    + Add Student
+                </button>
+            <?php endif; ?>
+            
             <a href="logout.php" class="btn btn-outline-danger">Logout</a>
         </div>
     </div>
@@ -34,6 +45,7 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
     <hr>
 
     <div id="studentTable">
+        <!-- Data loaded via JS -->
     </div>
 </div>
 
@@ -73,6 +85,7 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
     </div>
 </div>
 
+<!-- Edit Student Modal -->
 <div class="modal fade" id="editStudentModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
